@@ -37,12 +37,15 @@ class FlipperState extends State<Flipper> with SingleTickerProviderStateMixin {
   }
 
   void flipCard() {
-    if (isFront) {
-      _controller.forward();
-    } else {
-      _controller.reverse();
+    // Ensure the animation isn’t already playing
+    if (!_controller.isAnimating) {
+      if (isFront) {
+        _controller.forward();
+      } else {
+        _controller.reverse();
+      }
+      isFront = !isFront;
     }
-    isFront = !isFront;
   }
 
   @override

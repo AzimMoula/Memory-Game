@@ -4,8 +4,8 @@ import 'package:memory_game/screens/question.dart';
 import 'package:memory_game/services/flipper.dart';
 
 class Game extends StatefulWidget {
-  const Game({super.key});
-  static final GlobalKey<FlipperState> flipperKey = GlobalKey<FlipperState>();
+  Game({super.key});
+  final GlobalKey<FlipperState> flipperKey = GlobalKey<FlipperState>();
   @override
   State<Game> createState() => _GameState();
 }
@@ -25,7 +25,7 @@ class _GameState extends State<Game> {
             mainAxisSize: MainAxisSize.max,
             children: [
               Flipper(
-                key: Game.flipperKey,
+                key: widget.flipperKey,
                 front: const Question(),
                 back: const Answer(),
                 flippable: false,

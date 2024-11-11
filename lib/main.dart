@@ -3,7 +3,10 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:memory_game/screens/game.dart';
 import 'package:memory_game/screens/home.dart';
 import 'package:memory_game/screens/question.dart';
+import 'package:memory_game/screens/results.dart';
+import 'package:memory_game/screens/score_board.dart';
 import 'package:memory_game/screens/start.dart';
+import 'package:memory_game/screens/waiting.dart';
 import 'firebase_options.dart';
 
 void main() async {
@@ -29,9 +32,10 @@ class MyApp extends StatelessWidget {
       routes: {
         '/home': (context) => const Home(),
         '/start': (context) => const Start(),
-        '/game': (context) => const Game(),
-        '/results': (context) => const Home(),
-        '/score-board': (context) => const Home(),
+        '/waiting': (context) => const Waiting(),
+        '/game': (context) => Game(),
+        '/results': (context) => const Results(),
+        '/score-board': (context) => const ScoreBoard(),
       },
     );
   }

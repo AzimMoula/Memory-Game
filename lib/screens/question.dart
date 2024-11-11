@@ -14,12 +14,15 @@ class _QuestionState extends State<Question> {
   bool showImage = false;
   @override
   void initState() {
-    Future.delayed(const Duration(seconds: 3), () {
-      controller.start();
-      setState(() {
-        showImage = true;
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      Future.delayed(const Duration(seconds: 3), () {
+        controller.start();
+        setState(() {
+          showImage = true;
+        });
       });
     });
+
     super.initState();
   }
 
@@ -39,7 +42,7 @@ class _QuestionState extends State<Question> {
             trailing: CircularCountDownTimer(
                 controller: controller,
                 autoStart: false,
-                // isReverseAnimation: true,
+                isReverseAnimation: true,
                 ringGradient: const SweepGradient(colors: [
                   Colors.amber,
                   Colors.orange,
@@ -53,7 +56,7 @@ class _QuestionState extends State<Question> {
                 duration: 10,
                 isReverse: true,
                 onComplete: () {
-                  Game.flipperKey.currentState?.flipCard();
+                  Game().flipperKey.currentState?.flipCard();
                 },
                 fillColor: Colors.amber,
                 ringColor: Colors.black),

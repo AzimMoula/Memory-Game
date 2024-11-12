@@ -56,7 +56,7 @@ class _QuestionState extends State<Question> {
                 duration: 10,
                 isReverse: true,
                 onComplete: () {
-                  Game().flipperKey.currentState?.flipCard();
+                  Game.flipperKey.currentState?.flipCard();
                 },
                 fillColor: Colors.amber,
                 ringColor: Colors.black),

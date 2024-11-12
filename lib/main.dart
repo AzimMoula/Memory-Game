@@ -33,7 +33,7 @@ class MyApp extends StatelessWidget {
         '/home': (context) => const Home(),
         '/start': (context) => const Start(),
         '/waiting': (context) => const Waiting(),
-        '/game': (context) => Game(),
+        '/game': (context) => const Game(),
         '/results': (context) => const Results(),
         '/score-board': (context) => const ScoreBoard(),
       },

@@ -1,4 +1,6 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:memory_game/main.dart';
 
 class Start extends StatefulWidget {
   const Start({super.key});
@@ -9,7 +11,6 @@ class Start extends StatefulWidget {
 
 class _StartState extends State<Start> {
   TextEditingController name = TextEditingController();
-
   void joinTeam(String teamName) {
     showDialog(
         context: context,
@@ -56,11 +57,50 @@ class _StartState extends State<Start> {
                       ),
                     ),
                     ElevatedButton(
-                      onPressed: () {
-                        // name.clear();
+                      onPressed: () async {
                         // Navigator.of(context)
                         //     .popUntil((route) => route.isFirst);
-                        Navigator.pop(context);
+                        final querySnapshot = await FirebaseFirestore.instance
+                            .collection('Games')
+                            .where('Available', isEqualTo: true)
+                            .limit(1)
+                            .get();
+                        final teamdoc = FirebaseFirestore.instance
+                            .collection('Games')
+                            .doc(querySnapshot.docs.first.id)
+                            .collection('Teams')
+                            .doc(teamName);
+                        teamdoc.get().then((docSnapshot) async {
+                          if (docSnapshot.exists &&
+                              docSnapshot.data()!.containsKey('Players')) {
+                            await teamdoc.update({
+                              'Players': FieldValue.arrayUnion([
+                                {'Name': name.text, 'Score': []}
+                              ])
+                            });
+                            setState(() {
+                              userName = name.text;
+                              userIndex = docSnapshot['Players'].length - 1;
+                            });
+                            name.clear();
+                          } else {
+                            await teamdoc.set({
+                              'Players': [
+                                {'Name': name.text, 'Score': []}
+                              ]
+                            }, SetOptions(merge: true));
+                            setState(() {
+                              userName = name.text;
+                              userIndex = docSnapshot['Players'].length - 1;
+                            });
+                            name.clear();
+                          }
+                        }).catchError((error) {
+                          print("Failed to update players: $error");
+                        });
+                        setState(() {
+                          team = teamName == 'Android' ? false : true;
+                        });
                         Navigator.pushReplacementNamed(context, '/waiting');
                       },
                       style: ElevatedButton.styleFrom(
@@ -84,6 +124,7 @@ class _StartState extends State<Start> {
   Widget build(BuildContext context) {
     return SafeArea(
       child: Scaffold(
+        resizeToAvoidBottomInset: false,
         appBar: AppBar(
           title: const Text('Choose Team'),
         ),
@@ -144,9 +185,9 @@ class _StartState extends State<Start> {
                           child: Text(
                             'iOS',
                             style: TextStyle(
-                                fontSize: 34,
-                                color: Colors.white54,
-                                fontWeight: FontWeight.bold),
+                                fontSize: 45,
+                                color: Colors.black,
+                                fontWeight: FontWeight.w200),
                           ),
                         ),
                       ],
